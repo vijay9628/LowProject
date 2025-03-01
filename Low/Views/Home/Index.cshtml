@@ -9,10 +9,13 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <style>
         /* Make PDF viewer take full width */
+       
+
         #pdfViewer {
             width: 100%;
-            height: 80vh; /* Adjust height dynamically */
+            height: 80vh; /* Ensures the iframe is visible even when DevTools is open */
             border: none;
+            display: block; /* Prevents any inline-block shrinking issues */
         }
 
         /* Fix menu button size */
