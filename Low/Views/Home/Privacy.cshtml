@@ -1,6 +1,163 @@
-﻿@{
-    ViewData["Title"] = "Privacy Policy";
-}
-<h1>@ViewData["Title"]</h1>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IPC 1860 Sections</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const chapters = {
+                "Chapter 1": ["Section 1", "Section 2", "Section 3", "Section 4", "Section 5"],
+                "Chapter 2": ["Section 6", "Section 7", "Section 8", "Section 9", "Section 10"],
+                "Chapter 3": ["Section 11", "Section 12", "Section 13", "Section 14", "Section 15"]
+            };
 
-<p>Use this page to detail your site's privacy policy.</p>
+            const chapterList = document.getElementById("chapterList");
+            const sectionList = document.getElementById("sectionList");
+            const backButton = document.getElementById("backButton");
+            const pdfContainer = document.getElementById("pdfContainer");
+            const pdfViewer = document.getElementById("pdfViewer");
+            const backToSections = document.getElementById("backToSections");
+
+            // Hide sections and PDF initially
+            sectionList.style.display = "none";
+            backButton.style.display = "none";
+            pdfContainer.style.display = "none";
+
+            document.querySelectorAll("#chapterList li a").forEach(chapter => {
+                chapter.addEventListener("click", function () {
+                    const chapterName = this.innerText;
+                    chapterList.style.display = "none"; // Hide chapter list
+                    sectionList.style.display = "block"; // Show sections
+                    backButton.style.display = "block"; // Show back button
+
+                    sectionList.innerHTML = ""; // Clear previous sections
+                    if (chapters[chapterName]) {
+                        chapters[chapterName].forEach(section => {
+                            let li = document.createElement("li");
+                            let a = document.createElement("a");
+                            a.innerText = section;
+                            a.href = "#"; // Prevent page reload
+                            a.onclick = function () {
+                                pdfViewer.src = `/Images/${section}.pdf`; // Load PDF from wwwroot/Images
+                                sectionList.style.display = "none"; // Hide sections
+                                pdfContainer.style.display = "block"; // Show PDF container
+                                backToSections.style.display = "block"; // Show back to sections button
+                            };
+                            li.appendChild(a);
+                            sectionList.appendChild(li);
+                        });
+                    }
+                });
+            });
+
+            // Back button to show chapters again
+            backButton.addEventListener("click", function () {
+                chapterList.style.display = "block"; // Show chapter list
+                sectionList.style.display = "none"; // Hide sections
+                backButton.style.display = "none"; // Hide back button
+                pdfContainer.style.display = "none"; // Hide PDF viewer
+            });
+
+            // Back to Sections Button
+            backToSections.addEventListener("click", function () {
+                sectionList.style.display = "block"; // Show sections
+                pdfContainer.style.display = "none"; // Hide PDF viewer
+                backToSections.style.display = "none"; // Hide back button
+            });
+        });
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 10px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+        .col { display: flex; flex-direction: column; align-items: center; width: 100%; }
+        ul { list-style-type: none; padding: 0; }
+        li { margin: 8px 0; }
+        a { text-decoration: none; color: #007BFF; font-size: 18px; cursor: pointer; }
+        button {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        /* PDF Viewer - Book Style */
+        #pdfContainer {
+            display: none;
+            width: 90%;
+            max-width: 800px;
+            height: 500px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            padding: 10px;
+            text-align: center;
+        }
+        #pdfViewer {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* Responsive Styles */
+        @@media (max-width: 768px) {
+            #pdfContainer {
+                width: 95%;
+                height: 400px;
+            }
+        }
+        @@media (max-width: 480px) {
+            #pdfContainer {
+                width: 100%;
+                height: 350px;
+                border-radius: 0;
+            }
+        }
+        @@media (max-width: 320px) {
+            #pdfContainer {
+                height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="col py-3 content-area">
+    <!-- Chapters List -->
+    <div id="chapterList">
+        <h3>Select a Chapter:</h3>
+        <ul>
+            <li><a href="#">Chapter 1</a></li>
+            <li><a href="#">Chapter 2</a></li>
+            <li><a href="#">Chapter 3</a></li>
+        </ul>
+    </div>
+
+    <!-- Sections List (Hidden initially) -->
+    <div id="sectionList">
+        <h3>Sections:</h3>
+        <ul></ul>
+    </div>
+
+    <!-- Back to Chapters Button -->
+    <button id="backButton">Back to Chapters</button>
+
+    <!-- PDF Viewer -->
+    <div id="pdfContainer">
+        <iframe id="pdfViewer" src=""></iframe>
+        <button id="backToSections">Back to Sections</button>
+    </div>
+</div>
+
+</body>
+</html>
